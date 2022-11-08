@@ -49,11 +49,9 @@ class SinglyLinkedList {
         while (prevNode.next.value !== value) { // 삭제노드의 이전 노드 찾기
             prevNode = prevNode.next;
         }
-        if (prevNode.next) {
-            prevNode.next = prevNode.next.next;
-            if (!prevNode.next) { // 삭제할 노드의 다음 노드가 마지막 노드일때
-                this.tail = prevNode;
-            }
+        prevNode.next = prevNode.next.next;
+        if (!prevNode.next) {
+            this.tail = prevNode;// 삭제할 노드의 다음 노드가 마지막 노드일때
         }
     }
 
@@ -77,7 +75,10 @@ linkedList.append(2);
 linkedList.append(3);
 linkedList.append(4);
 linkedList.append(5);
+linkedList.remove(5)
 linkedList.disply();
+console.log(linkedList);
+/*
 console.log(linkedList.find(4));
 linkedList.remove(3);
 linkedList.disply();
@@ -86,4 +87,4 @@ linkedList.disply();
 console.log(linkedList);
 linkedList.insert(linkedList.find(2), 8);
 linkedList.disply();
-console.log(linkedList);
+console.log(linkedList);*/

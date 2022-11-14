@@ -21,33 +21,50 @@
 
 
 function solution(priorities, location) {
-    if(priorities.length >= 1 || priorities.length < 100) return -1;
-    if (location <=1 || location > 10)  return -1;
 
-    const arr =  [];
-    let front = 0;
-    let rear = 0;
-
-    // 2 1 3 -> 1 3 2 -> 3 2 1 2
-
-    // [2, 1, 3, 2]   0 : 2, 1 : 1,
-    priorities.reduce((pre,curr) => {
-        if (pre === 0) {
-            arr[rear++] = curr;
-            return curr;
+    const arr = priorities.map((property, index) => {
+        return {index, property};
+    });
+    let idx = 0;
+    while (true) {
+        const curr = arr.shift();
+        if (arr.some(value => value.property > curr.property)) {
+            arr.push(curr);
+        } else {
+            idx++;
+            if(curr.index === location) return idx;
         }
-        if (pre > cuur) {
-            arr[rear++] = curr;
-        }else if (pre > curr) {
-            const pre = 
-
-        }else  {
-
-        }
-    },0);
-
+    }
 
 }
 
-console.log(solution([2, 1, 3, 2], -1));
-// solution([2, 1, 3, 2],2);
+
+
+console.log(solution([2, 1, 3, 2], 2));
+/*[
+  { index: 0, property: 2 },
+  { index: 1, property: 1 },
+  { index: 2, property: 3 },
+  { index: 3, property: 2 }
+]
+
+*
+* */
+console.log(solution([1, 1, 9, 1, 1, 1], 0));
+/*
+*[
+  { index: 0, property: 1 },
+  { index: 1, property: 1 },
+  { index: 2, property: 9 },
+  { index: 3, property: 1 },
+  { index: 4, property: 1 },
+  { index: 5, property: 1 }
+]
+
+*
+* */
+
+// 0 1   2 3  4  5
+// A, B, C, D, E, F
+// 2 3 4 5 0  1
+// C D E F A B

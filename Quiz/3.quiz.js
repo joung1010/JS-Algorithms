@@ -16,31 +16,46 @@
     */
 function solution(genres, plays) {
     const result = [];
-    const genre = [...new Set(genres.map(x => x))]
-        .sort((a, b) => b.localeCompare(a));
+    const genresTotal = {};
 
     const songs = genres.map((genre, idx) => {
         return {idx, genre, plays: plays[idx]};
     });
-    for (const value of genre) {
-        const song = songs.filter(x => x.genre === value)
-            .sort((a, b) => {
-            if (a.genre !== b.genre) return 0;
+    for (const song of songs) {
+        if (!genresTotal[song.genre]) {
+            genresTotal[song.genre] = song.plays;
+        } else {
+            const plays = genresTotal[song.genre] + song.plays;
+            genresTotal[song.genre] = plays;
+        }
+    }
+     Object.keys(genresTotal).sort((a, b) => genresTotal[b] - genresTotal[a])
+        .forEach((value) => {
+            const arr = songs.filter(song => song.genre === value)
+                .sort((a, b) => {
+                    if (a.plays === b.plays) {
+                        return a.idx - b.idx;
+                    } else {
+                        return b.plays - a.plays;
+                    }
+                }).filter((_,idx) => idx < 2);
+            result.push(...arr.map(x => x.idx));
+        });
+
+     return result;
+}
+
+/*.forEach((value)=>{
+    const arr = songs.filter(song => song === value)
+        .sort((a, b) => {
             if (a.plays === b.plays) {
                 return a.idx - b.idx;
             } else {
                 return b.plays - a.plays;
             }
-        });
-        const length = song.length >= 2 ? 2 : 1;
-        for (let i = 0; i < length; i++) {
-            result.push(song[i].idx);
-        }
-    }
-    return result;
-}
-
-
+        }).filter((_,idx) => idx < 2);
+    console.log(arr);
+});*/
 
 /*sort((a, b) => {
     if (a.genre < b.genre) {

@@ -45,47 +45,27 @@ function solution(genres, plays) {
      return result;
 }
 
-/*.forEach((value)=>{
-    const arr = songs.filter(song => song === value)
-        .sort((a, b) => {
-            if (a.plays === b.plays) {
-                return a.idx - b.idx;
-            } else {
-                return b.plays - a.plays;
-            }
-        }).filter((_,idx) => idx < 2);
-    console.log(arr);
-});*/
-
-/*sort((a, b) => {
-    if (a.genre < b.genre) {
-        return -1;
-    }
-    if (a.genre > b.genre) {
-        return 1;
-    }
-    return 0;
-}).sort((a, b) => {
-    if (a.genre !== b.genre) return 0;
-    if (plays[a.idx] === plays[b.idx]) {
-        return a.idx - b.idx;
-    } else {
-        return plays[b.idx] - plays[a.idx];
-    }
-}).filter((album) => {
-    return  _genre.some((value => {
-            if (album.genre !== value) {
-                return false;
-            }
-            cnt++;
-            if (cnt > 2) {
-                cnt = 0;
-                return false
-            }
-            return true;
-        })
-    )
-});*/
+/*
+*
+* 테스트 1 〉	통과 (0.18ms, 33.5MB)
+테스트 2 〉	통과 (0.19ms, 32.9MB)
+테스트 3 〉	통과 (0.18ms, 32.8MB)
+테스트 4 〉	통과 (0.15ms, 33.4MB)
+테스트 5 〉	통과 (0.38ms, 33.5MB)
+테스트 6 〉	통과 (0.39ms, 33.4MB)
+테스트 7 〉	통과 (0.40ms, 33.5MB)
+테스트 8 〉	통과 (0.33ms, 33.5MB)
+테스트 9 〉	통과 (0.19ms, 33.3MB)
+테스트 10 〉	통과 (0.41ms, 33.4MB)
+테스트 11 〉	통과 (0.30ms, 33.5MB)
+테스트 12 〉	통과 (0.38ms, 33.4MB)
+테스트 13 〉	통과 (0.39ms, 33.5MB)
+테스트 14 〉	통과 (0.41ms, 33.4MB)
+테스트 15 〉	통과 (0.28ms, 33.4MB)
+*
+*
+*
+* */
 
 console.log(solution(["classic", "pop", "classic", "classic", "pop"], [500, 600, 150, 800, 2500]));
 

@@ -59,6 +59,9 @@ class MaxHeap {
         return returnValue;
     }
 
+    get maxHeap() {
+        return [...this.heap];
+    }
 }
 
 
@@ -74,7 +77,7 @@ function solution(no, works) {
     for (let i = 0; i < no; i++) {
         heap.push(heap.pop() - 1);
     }
-    return heap.heap.reduce((acc,cur)=>acc+cur*cur,0);
+    return heap.maxHeap.reduce((acc,cur)=>acc+cur*cur,0);
 }
 //효율성 테스트 실패 (시간 초과)
 

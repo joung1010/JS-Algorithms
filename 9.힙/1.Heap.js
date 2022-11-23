@@ -19,6 +19,8 @@ class MaxHeap {
     }
 
     pop() {
+        if (this.heap.length === 2) return this.heap.pop();
+
         const returnValue = this.heap[1];
         this.heap[1] = this.heap.pop();
 

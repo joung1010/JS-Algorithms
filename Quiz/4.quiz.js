@@ -79,7 +79,6 @@ function solution(no, works) {
     }
     return heap.maxHeap.reduce((acc,cur)=>acc+cur*cur,0);
 }
-//효율성 테스트 실패 (시간 초과)
 
 console.log([2, 3, 3].sort((a, b) => b - a));
 console.log(solution(4, [4, 3, 3]));

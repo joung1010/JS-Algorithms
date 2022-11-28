@@ -40,14 +40,19 @@ words	result
     world는 worl까지 입력해야 한다. (word와 구분되어야 함을 명심하자)
 */
 
-1. 트라이 활용
-2. ???????
+// 1. 트라이 활용
+// 2. 트라이에서 중복으로 검색되는 횟수가 1까지 갈때까지의 반복횟수의 합
 
-/*
+
 class Node {
     constructor(value = "") {
         this.value = value;
         this.children = new Map();
+        this.cnt = 0;
+    }
+
+    addCnt() {
+        this.cnt++;
     }
 }
 
@@ -63,21 +68,22 @@ class Trie {
                 currNode.children.set(char, new Node(currNode.value + char));
             }
             currNode = currNode.children.get(char);
+            currNode.addCnt();
             console.log(currNode);
         }
     }
 
 }
-*/
 
 
 
 function solution(words) {
     const trie = new Trie();
     words.forEach(item => trie.insert(item));
-    return trie.lineCount;
+    // return trie.lineCount;
 }
 
 console.log(solution(["go", "gone", "guild"]));
-console.log(solution(["abc","def","ghi","jklm"]));
-console.log(["word", "war", "warrior", "world"]);
+// console.log(makeTrie(["go", "gone", "guild"]));
+// console.log(solution(["abc","def","ghi","jklm"]));
+// console.log(["word", "war", "warrior", "world"]);

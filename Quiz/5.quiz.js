@@ -69,8 +69,20 @@ class Trie {
             }
             currNode = currNode.children.get(char);
             currNode.addCnt();
-            console.log(currNode);
         }
+    }
+
+    findWords(words) {
+        let wordCnt = 0;
+        words.forEach(word => {
+            let currNode = this.root;
+            for (const char of word) {
+                wordCnt++;
+                currNode = currNode.children.get(char);
+                if (currNode.cnt <= 1) break;
+            }
+        });
+        return wordCnt;
     }
 
 }
@@ -80,10 +92,9 @@ class Trie {
 function solution(words) {
     const trie = new Trie();
     words.forEach(item => trie.insert(item));
-    // return trie.lineCount;
+    return trie.findWords(words);
 }
 
 console.log(solution(["go", "gone", "guild"]));
-// console.log(makeTrie(["go", "gone", "guild"]));
-// console.log(solution(["abc","def","ghi","jklm"]));
-// console.log(["word", "war", "warrior", "world"]);
+console.log(solution(["abc","def","ghi","jklm"]));
+console.log(solution(["word","war","warrior","world"]));

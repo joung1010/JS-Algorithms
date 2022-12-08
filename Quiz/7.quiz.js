@@ -9,45 +9,39 @@
     vertex 배열 각 행 [a, b]는 a번 노드와 b번 노드 사이에 간선이 있다는 의미입니다.*/
 
 const BFS = (graph, startNode) => {
-    const visited = {};
-    let needVisit = [];
+    const visited = [startNode];
+    const queue = [];
+    queue.push(startNode);
 
-    needVisit.push(startNode);
-    while (needVisit.length) {
-        const node = needVisit.shift();
-        if (!visited.hasOwnProperty(node)) {
-            visited[node] = 1;
-            if (!graph[node]) continue;
-            needVisit = [...needVisit, ...graph[node]];
-        }
-        visited[node] += 1;
+    while(queue.length){
+        const node = queue.shift() - 1;
+        // 주변탐색
+        graph[node].forEach(line => {
+            if (!visited[line - 1]) {
+                queue.push(line);
+                // 루트 노드에서 얼마나 떨어져있는지 확인
+                visited[line - 1] = visited[node] + 1;
+            }
+        });
     }
+
     return visited;
-};
+}
 
 function solution(n, edge) {
-    const res = [];
-    const graph = {};
-    edge.sort((a, b) => {
-        if (a[0] < b[0]) {
-            return a[0] - b[0];
-        }
-        if (a[0] === b[0]) {
-            return a[1] - b[1];
-        }
-        if (a[0] > b[0]) {
-            return   a[0] - b[0];
-        }
-    }).forEach(edge => {
-        if (!graph[edge[0]]) {
-            graph[edge[0]] = [edge[1]];
-        } else {
-            graph[edge[0]] = [...graph[edge[0]], edge[1]];
-        }
-    });
-    console.log(graph);
-    console.log(BFS(graph, edge[0][0]));
+    const arr = Array.from(new Array(n), (_) => []);
+    // 양방향
+    for (const node of edge) {
+        arr[node[0] - 1].push(node[1]);
+        arr[node[1] - 1].push(node[0]);
+    }
+    console.log(arr);
+    const res = BFS(arr, 1);
+    console.log(res);
+    const max = Math.max(...res);
+    return res.filter(item => item === max).length;
 }
+
 
 
 console.log(solution(6, [[3, 6], [4, 3], [3, 2], [1, 3], [1, 2], [2, 4], [5, 2]]));

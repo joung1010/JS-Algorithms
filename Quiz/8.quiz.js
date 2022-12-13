@@ -24,6 +24,7 @@ number는 2자리 이상, 1,000,000자리 이하인 숫자입니다.
 
 
 function solution(number, k) {
+    if(number.length - 1 ===k) return [...number].sort((a, b) => parseInt(b) - parseInt(a))[0];
     const res = [];
     for (const num of number) {
         while (k > 0 && res[res.length - 1] < num) {
@@ -35,6 +36,7 @@ function solution(number, k) {
     return res.join('');
 }
 
-console.log(solution("1924", 2));
-console.log(solution("1231234", 3));
-console.log(solution("4177252841", 4));
+// console.log(solution("1924", 2));
+// console.log(solution("1231234", 3));
+console.log(solution("4177252841", "4177252841".length - 1));
+// console.log(solution("4177252841", 4));

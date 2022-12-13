@@ -11,32 +11,30 @@
 제한 조건
 number는 2자리 이상, 1,000,000자리 이하인 숫자입니다.
     k는 1 이상 number의 자릿수 미만인 자연수입니다.*/
-
-// 1924
 // k = 2
-//1:  19 12 13
-//2:  92 94
-//3:  24
+// 1 9 2 4
+//  1: [1]
+//  2 : 9 < [1] -> [9]
+// 3 : 2 < [9] -> [9, 2]
+// 4 :4  < [9,2]:2 -> [9,4]
 
-// 1231234
-// k = 3
-//1: 1231 1312 1123 1234
-//2: 2312 2123 2234
-//3: 3123 3234
-//4: 1234
+
+
 
 
 
 function solution(number, k) {
-    const numbers = [...number];
-    const size = numbers.length - k;
-    const set = new Set();
-
-
-
-    console.log(set);
-    return Math.max(...set);
+    const res = [];
+    for (const num of number) {
+        while (k > 0 && res[res.length - 1] < num) {
+            res.pop();
+            k--;
+        }
+        res.push(num);
+    }
+    return res.join('');
 }
 
-// console.log(solution("1924", 2));
+console.log(solution("1924", 2));
 console.log(solution("1231234", 3));
+console.log(solution("4177252841", 4));

@@ -35,45 +35,53 @@ N개의 마을로 이루어진 나라가 있습니다.
 8.도착점의 값을 확인한다.*/
 
 
+/*
+{
+    node: "number", // 정점 번호
+        cost: "number"  // 간선의 값
+} 추가될 value 값은 객체 형태이다.
+*/
+
+
+
 class Heap {
     constructor() {
         this.heap = [null];
     }
 
     push(value) {
-        let currentIdx = this.heap.length - 1;
-        let parentIdx = Math.floor(currentIdx / 2);
+        this.heap.push(value);
+        let currentIndex = this.heap.length - 1;
+        let parentIndex = Math.floor(currentIndex / 2);
 
-        while (parentIdx !== 0 && this.heap[parentIdx] > value) {
-            const temp = this.heap[parentIdx];
-            this.heap[parentIdx] = value;
-            this.heap[currentIdx] = temp;
-            currentIdx = parentIdx;
-            parentIdx = Math.floor(currentIdx / 2);
+        while (parentIndex !== 0 && this.heap[parentIndex].cost > value.cost) {
+            this._swap(parentIndex, currentIndex)
+
+            currentIndex = parentIndex;
+            parentIndex = Math.floor(currentIndex / 2);
         }
     }
 
     pop() {
-        if(this.isEmpty()) return;
+        if (this.isEmpty()) return;
         if (this.heap.length === 2) return this.heap.pop();
 
-        const rtnValue = this.heap[1];
+        const returnValue = this.heap[1];
         this.heap[1] = this.heap.pop();
 
-        let currentIdx = 1;
-        let leftIdex = 2;
-        let rightIdx = 3;
-        while (this.heap[currentIndex] > this.heap[leftIndex] || this.heap[currentIndex] > this.heap[rightIndex]) {
-            if (this.heap[leftIndex] > this.heap[rightIndex]) {
-                const temp = this.heap[currentIndex];
-                this.heap[currentIndex] = this.heap[rightIndex]
-                this.heap[rightIndex] = temp;
-                currentIndex = rightIndex;
-            } else {
-                const temp = this.heap[currentIndex];
-                this.heap[currentIndex] = this.heap[leftIndex];
-                this.heap[leftIndex] = temp;
-                currentIndex = leftIndex;
+        let currentIndex  = 1;
+        let leftIndex = 2;
+        let rightIndex = 3;
+        while ((this.heap[leftIndex] && this.heap[currentIndex].cost > this.heap[leftIndex].cost) ||
+        (this.heap[rightIndex] && this.heap[currentIndex].cost > this.heap[rightIndex].cost)) {
+            if (this.heap[leftIndex] === undefined) { // 왼쪽 정점이 없을 경우
+                this._swap(rightIndex, currentIndex)
+            } else if (this.heap[rightIndex] === undefined) { // 오른쪽 정점이 없을 경우
+                this._swap(leftIndex, currentIndex)
+            } else if (this.heap[leftIndex].cost > this.heap[rightIndex].cost) {
+                this._swap(rightIndex, currentIndex)
+            } else if (this.heap[leftIndex].cost <= this.heap[rightIndex].cost) {
+                this._swap(leftIndex, currentIndex)
             }
             leftIndex = currentIndex * 2;
             rightIndex = currentIndex * 2 + 1;
@@ -85,14 +93,59 @@ class Heap {
     isEmpty() {
         return this.heap.length === 1;
     }
+
+    _swap(a, b) { // 편의를 위해 배열의 요소를 swap하는 함수 작성
+        [this.heap[a], this.heap[b]] = [this.heap[b], this.heap[a]];
+    }
+}
+
+/*다익스트라 알고리즘 구현
+힙까지 구현했다면 다익스트라 알고리즘 자체는 크게 어렵지 않습니다.
+
+    먼저 힙을 생성합니다.
+    각 정점에 대한 최단 거리를 저장할 배열을 무한대로 초기화합니다.
+    힙에 시작점을 추가합니다.
+    힙이 비어있지 않을 때 까지 루프를 돕니다.
+    선택된 정점에서 갈 수 있는 정점을 찾습니다.
+    더 짧은 경로라면 값을 갱신합니다.
+    루프가 종료되면 최단 거리 배열을 반환합니다.
+    위와 같은 흐름으로 알고리즘을 작성한 코드는 다음과 같습니다.*/
+
+function dijkstra(road, N) {
+    const heap = new Heap(); // 우선순위 큐(힙)
+    heap.push({ node: 1, cost: 0 }) // 1번 마을부터 시작
+
+    const dist = [...Array(N + 1)].map(() => Infinity); // 계산하기 편하도록 N+1 길이만큼 리스트 생성
+    dist[1] = 0; // 1번 마을은 무조건 거리가 0
+
+    while (!heap.isEmpty()) { // heap이 비어있지 않다면
+        // cost가 가장 낮은 정점을 뽑는다.
+        const { node: current, cost: currentCost } = heap.pop();
+
+        for (const [src, dest, cost] of road) { // 루프를 돌며 시작점, 도착점, 비용을 꺼낸다
+            const nextCost = cost + currentCost; // 비용
+
+            // 양방향을 고려하여 작성
+            if (src === current && nextCost < dist[dest]) {
+                // src가 현재 선택된 정점이면서 목적지까지 더 저렴할 경우
+                dist[dest] = nextCost; // 거리를 갱신한다.
+                heap.push({ node: dest, cost: nextCost }); // push
+            } else if (dest == current && nextCost < dist[src]) {
+                // dest가 현재 선택된 정점이면서 목적지까지 더 저렴할 경우
+                dist[src] = nextCost; // 거리를 갱신한다.
+                heap.push({ node: src, cost: nextCost }); // push
+            }
+        }
+    }
+
+    return dist; // 1번 마을부터 각 마을까지의 최단 거리
 }
 
 
 function solution(N, road, K) {
-    var answer = 0;
-
-    // [실행] 버튼을 누르면 출력 값을 볼 수 있습니다.
-    console.log('Hello Javascript')
-
-    return answer;
+    const dist = dijkstra(road, N);
+    console.log(dist);
+    return dist.filter(x => x <= K).length;
 }
+
+console.log(solution(5, [[1, 2, 1], [2, 3, 3], [5, 2, 2], [1, 4, 2], [5, 3, 1], [5, 4, 2]],3));

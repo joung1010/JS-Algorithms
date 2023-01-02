@@ -44,7 +44,7 @@ class Heap {
         let currentIdx = this.heap.length - 1;
         let parentIdx = Math.floor(currentIdx / 2);
 
-        while (parentIdx !== 0 && this.heap[parentIdx] < value) {
+        while (parentIdx !== 0 && this.heap[parentIdx] > value) {
             const temp = this.heap[parentIdx];
             this.heap[parentIdx] = value;
             this.heap[currentIdx] = temp;
@@ -57,11 +57,27 @@ class Heap {
         if(this.isEmpty()) return;
         if (this.heap.length === 2) return this.heap.pop();
 
-        const rtnValue = this.heap.pop();
+        const rtnValue = this.heap[1];
+        this.heap[1] = this.heap.pop();
+
         let currentIdx = 1;
         let leftIdex = 2;
         let rightIdx = 3;
-
+        while (this.heap[currentIndex] > this.heap[leftIndex] || this.heap[currentIndex] > this.heap[rightIndex]) {
+            if (this.heap[leftIndex] > this.heap[rightIndex]) {
+                const temp = this.heap[currentIndex];
+                this.heap[currentIndex] = this.heap[rightIndex]
+                this.heap[rightIndex] = temp;
+                currentIndex = rightIndex;
+            } else {
+                const temp = this.heap[currentIndex];
+                this.heap[currentIndex] = this.heap[leftIndex];
+                this.heap[leftIndex] = temp;
+                currentIndex = leftIndex;
+            }
+            leftIndex = currentIndex * 2;
+            rightIndex = currentIndex * 2 + 1;
+        }
 
         return returnValue;
     }

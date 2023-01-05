@@ -61,8 +61,8 @@ const kruskal = (n, cost) => {
                 return false;
             }
             // 더 작은 비용 작은 쪽으로 병합
-            if(srcNode < destNode) disJoin[destNode] = srcNode
-            else disJoin[srcNode] = destNode
+            if(srcNode < destNode) disJoin[destNode] = srcNode;
+            else disJoin[srcNode] = destNode;
             return true;
         });
 };

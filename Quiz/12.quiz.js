@@ -36,21 +36,11 @@
 *   -> 같은 그룹으로 인해 발생한 Cycle을 제외하고 cost 비용의 합을 구한다.
 *
 * */
-/*
-*   여기서 의문점 최상위 노드를 바로 넣어보자
-*                                         0  1
-*  { src: 0, dest: 1, cost: 1 },        [ 0, 1, 2, 3 ]  -> [ 0, 0, 2, 3 ]
-                                              1   3
-  { src: 1, dest: 3, cost: 1 },         [ 0, 1, 2, 3 ]  -> [ 0, 0, 2, 0 ]
-  *                                       0     2
-  { src: 0, dest: 2, cost: 2 },         [ 0, 1, 2, 3 ]  -> [ 0, 0, 0, 0 ]
-  *
-  { src: 1, dest: 2, cost: 5 },
-  { src: 2, dest: 3, cost: 8 }
 
-*
-*
-* */
+function find(node,array) {
+    if (array[node] === node) return node;
+    return  array[node] = find(array[node], array);
+}
 
 
 const kruskal = (n, cost) => {
@@ -65,32 +55,25 @@ const kruskal = (n, cost) => {
     return  degrees.sort((a, b) => a.cost - b.cost)
         .filter(item => {
             const {src, dest, cost} = item;
-            if (disJoin[src] === disJoin[dest]) {
+            const srcNode = find(src, disJoin);
+            const destNode = find(dest, disJoin);
+            if (srcNode === destNode) {
                 return false;
             }
-            const node = disJoin[src];
-            disJoin[dest] = node;
+            // 더 작은 비용 작은 쪽으로 병합
+            if(srcNode < destNode) disJoin[destNode] = srcNode
+            else disJoin[srcNode] = destNode
             return true;
         });
 };
 
 
 function solution(n, costs) {
-    if(n === 1) return costs[3];
+    if(n === 1) return costs[0][2];
     return kruskal(n,costs).reduce((acc,cur) => acc + cur.cost,0);
 }
-/*
-* 테스트 1 〉	실패 (0.15ms, 33.4MB)
-테스트 2 〉	통과 (0.25ms, 33.4MB)
-테스트 3 〉	실패 (0.31ms, 33.5MB)
-테스트 4 〉	실패 (0.30ms, 33.5MB)
-테스트 5 〉	실패 (0.28ms, 33.5MB)
-테스트 6 〉	실패 (0.33ms, 33.2MB)
-테스트 7 〉	실패 (0.37ms, 33.3MB)
-테스트 8 〉	통과 (0.38ms, 33.4MB)
-*
-*
-* */
+
 
 // console.log(kruskal(4, [[0, 1, 1], [0, 2, 2], [1, 2, 5], [1, 3, 1], [2, 3, 8]]));
 console.log(solution(4, [[0, 1, 1], [0, 2, 2], [1, 2, 5], [1, 3, 1], [2, 3, 8]]));
+// console.log(solution(1, [[0, 1, 1]]));

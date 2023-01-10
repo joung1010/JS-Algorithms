@@ -23,8 +23,46 @@
 // gems 배열의 각 원소는 길이가 1 이상 10 이하인 알파벳 대문자로만 구성된 문자열입니다.
 
 // 구간합 문제
-// 구간의 합 = 보석배열의 길이(중복x)??
-//1.중복없는 순수 복석 배열 만들기
+/*
+포인터	    P1	P2
+진열대 번호	1	2	      3	     4	5	    6	7	        8
+보석 이름	DIA	RUBY	RUBY	DIA	DIA	EMERALD	SAPPHIRE	DIA
+
+포인터	    P1	          P2
+진열대 번호	1	2	      3	     4	5	    6	7	        8
+보석 이름	DIA	RUBY	RUBY	DIA	DIA	EMERALD	SAPPHIRE	DIA
+
+포인터	    P1	                 P2
+진열대 번호	1	2	      3	     4	5	    6	7	        8
+보석 이름	DIA	RUBY	RUBY	DIA	DIA	EMERALD	SAPPHIRE	DIA
+
+포인터	    P1	                    P2
+진열대 번호	1	2	      3	     4	5	    6	7	        8
+보석 이름	DIA	RUBY	RUBY	DIA	DIA	EMERALD	SAPPHIRE	DIA
+
+포인터	    P1	                            P2
+진열대 번호	1	2	      3	     4	5	    6	7	        8
+보석 이름	DIA	RUBY	RUBY	DIA	DIA	EMERALD	SAPPHIRE	DIA
+
+포인터	    P1	                                P2
+진열대 번호	1	2	      3	     4	5	    6	7	        8
+보석 이름	DIA	RUBY	RUBY	DIA	DIA	EMERALD	SAPPHIRE	DIA
+
+포인터	        P1	                            P2
+진열대 번호	1	2	      3	     4	5	    6	7	        8
+보석 이름	DIA	RUBY	RUBY	DIA	DIA	EMERALD	SAPPHIRE	DIA
+
+포인터	                  P1	                P2
+진열대 번호	1	2	      3	     4	5	    6	7	        8
+보석 이름	DIA	RUBY	RUBY	DIA	DIA	EMERALD	SAPPHIRE	DIA
+
+
+포인터	                         P1	           P2
+진열대 번호	1	2	      3	     4	5	    6	7	        8
+보석 이름	DIA	RUBY	RUBY	DIA	DIA	EMERALD	SAPPHIRE	DIA
+
+*/
+
 
 const getSize = (array) => {
     const size = new Set(array).size;
@@ -32,26 +70,20 @@ const getSize = (array) => {
 };
 
 function solution(gems) {
-    const gemsLength = [...new Set(gems)].length;
-    let count = [];
-    let partialSum = [gems[0]];
-    let point1 = 0;
-    let point2 = 0;
-    let lastIndex = gems.length - 1;
-    while (point1 !== lastIndex) {
-        if (getSize(partialSum) === gemsLength) {
-            count.push([point1+1,point2+1]);
-        }
+    const gemmKinds = new Set(gems).size;
+    const gemsLength = gems.length;
 
-        if (point2 !== lastIndex && partialSum.length < gems.length) {
-            point2 += 1;
-            partialSum.push(gems[point2]);
-        } else if(point2 === lastIndex ||  partialSum.length >= gems.length) {
-            partialSum.shift();
-            point1+=1;
-        }
-    }
-    console.log(count);
+    const answer = [0, gemsLength]; // 모든 보석을 구매하는 경우
+    const collect = new Map(gems[0],1);  // 구간합 집계
+                                         // -> 첫번째 보석, 진열대 번호
+    let str = 0;    // point 1
+    let end = 0;   // point 2
+
+
+
 }
 
-console.log(solution(["DIA", "RUBY", "RUBY", "DIA", "DIA", "EMERALD", "SAPPHIRE", "DIA"]));
+// console.log(solution(["DIA", "RUBY", "RUBY", "DIA", "DIA", "EMERALD", "SAPPHIRE", "DIA"]));
+// console.log(solution(["AA", "AB", "AC", "AA", "AC"]));
+// console.log(solution(["XYZ", "XYZ", "XYZ"]));
+// console.log(solution(["ZZZ", "YYY", "NNNN", "YYY", "BBB"]));

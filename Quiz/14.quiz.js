@@ -33,8 +33,6 @@
 //                  3              1        2
 
 
-
-
 //  체스판[퀸을둔 위치] === 체스판[현재위치]
 //           체스판[현재 위치]  -    체스판[퀸을둔 위치]                (현재위치  - 퀸을둔 위치)
 
@@ -48,21 +46,37 @@
 //2:3===2             2                   3                         2             3
 
 
-
-
-
-
-
-
-
 // 대각선 위치는
 // 0 1 2 3
 //
 
+const checkChessBoard = (board, row) => {
+    for (let i = 0; i < row; i++) {
+        // 같은 줄                     대각 선 길이가 같다는 것은 행 과 열의 길이가 같다는 뜻
+        if (board[row] === board[i] || Math.abs(board[row] - board[i]) === Math.abs(row - i)) return false;
+    }
+    return true;
+};
+
+
+const setQueen = (chessboard, row) => {
+    const n = chessboard.length;
+    // 퀸을 체스판에 서로 공격하지 않게 전부 둠
+    if (n === row) return 1;
+    let cnt = 0;
+    // 퀸을 n개 만큼 둔다
+    for (let i = 0; i < n; i++) {//옆칸으로 이동
+        // 체스판의 첫번째 줄에 하나씩 둔다.
+        chessboard[row] = i; //체스판의 row행의 i번째에 퀸을 둔다.
+        // 퀸을 둘 수 있다면 행을 이동 -> 1줄 내려감
+        if (checkChessBoard(chessboard, row)) cnt += setQueen(chessboard, row + 1);
+    }
+    return cnt;
+};
+
 
 function solution(n) {
-    var answer = 0;
-    return answer;
-}
+    return setQueen(new Array(n).fill(0), 0);
+};
 
 console.log(solution(4));

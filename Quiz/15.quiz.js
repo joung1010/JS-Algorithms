@@ -17,26 +17,9 @@
 // ba+na+n+a
 // ba + na
 
-// 배열로 구현시 단어가 조합된후 초기화 할때 어려움이 있음.
 function solution(strs, t) {
     const length = strs.length;
-    const res = [];
-    let words = [];
-    for (let i = 0; i < length; i++) {
-        words[i] = 0;
-        for (let j = 0; j < length; i++) {
-            words.push(strs[j]);
-            let word = words.join("");
-            if(!strs.indexOf(word)) continue;
-            j = i;
-            if (word === t) {
-                res.push(words.length);
-                break;
-            }
-        }
-    }
-    console.log(res);
-    return res.sort()[0];
+
 }
 
 

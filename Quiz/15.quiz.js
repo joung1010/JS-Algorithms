@@ -13,15 +13,41 @@
 //     모든 문자열은 알파벳 소문자로만 이루어져 있습니다.
 
 // 가장 작은 문제를 정의할 수 있는가??
+
 // ["ba","na","n","a"]
-// ba+na+n+a
-// ba + na
+//i = 1 -> b 1          [0,Infinity,0,0,0,0,0]
+//i = 2 -> a 1, ba 2    [0,Infinity,Infinity,0,0,0,0], [0,Infinity,1,0,0,0,0]
+//i = 3 -> n 1, an 2, ban 3
+//i = 4 -> a 1, na 2, ana 3,bana 4
+//i = 5 -> n, an, nan.anan,banan
+//i = 6 -> a, na, ana.nana,anana,banana
 
 function solution(strs, t) {
-    const length = strs.length;
+    const res = new Array(t.length + 1).fill(0);
+    const wordSet = new Set(strs);
+    for (let i = 1; i < t.length+1; i++) {
+        res[i] = Infinity;
+        for (let j = 1; j < Math.min(i + 1, 6); j++) {
+            // 처음에는 해당 인덱스번째 단어와
+            // 루프를 통해 단어를 반복하면서 조합함
+            const str = i - j;
+            const end = i;
+            const word = t.slice(str, end);
+            // 조합된 단어가 단어조각Set안에 존재하는지 확인
+            if (wordSet.has(word)) {
+                // 단어조각안에 존재하면 이전 조합과 더해서 최솟값인지 체크 후 대입
+                //DP[i] : i번째 단계에서 사용한 단어조각의 최솟값
+                // DP[현재 문자의 위치 - 단어조각 길이] :
+                // DP[i] = Math.min(DP[i], DP[현재 문자의 위치 - 단어조각 길이] + 1)
+                res[i] = Math.min(res[i], res[i - j] + 1);
+            }
+        }
+    }
 
 }
 
 
+
+
 console.log(solution(["ba", "na", "n", "a"], "banana"));
-// console.log(["ba", "na", "n", "a"].join(""));
+// console.log(new Set(["ba", "na", "n", "a"]).has("ban"));

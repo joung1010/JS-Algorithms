@@ -46,6 +46,16 @@ function solution(strs, t) {
     }
     return res[res.length - 1] === Infinity ? -1 : res[res.length - 1];
 }
+// ["ba","na","n","a"] 단어를 기준으로
+// ba   -> ba는 단어조각에 존재 단어를 1개 사용함
+// ban  -> ban -> b + an , ba + n 이때 b + an는 불가능 하기때문에 ba + n 이때 ba는 이전단계에서 1을구함 따라서 1 + 1 = 2 단어 2개 사용
+// bana -> ba + na 가능 ba는 이전에 1을 구했고 na는 단어 조각에 존재하므로 2개의 단어를 사용
+// banan -> bana + n 이전 단계에서 bana가 2개의 단어를 사용했다는 것을 알고있음 따라서 n만 더해서 3
+// banana -> bana + na bana 2고 na 1 , banan + n 은 3 + 1 둘중 더 작은 값인 3이 선택됨
+
+// 따러서 res[i]는 현재 조합된 단어 ba, ban, bana 와같이 해당 단어 조합의 최솟값을 가지고있고
+// res[i - j] 이전에 조합된 단어를 기억했다가 다시 꺼내온다.
+
 
 
 

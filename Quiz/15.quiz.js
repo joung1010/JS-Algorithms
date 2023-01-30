@@ -15,17 +15,18 @@
 // 가장 작은 문제를 정의할 수 있는가??
 
 // ["ba","na","n","a"]
-//i = 1 -> b 1          [0,Infinity,0,0,0,0,0]
-//i = 2 -> a 1, ba 2    [0,Infinity,Infinity,0,0,0,0], [0,Infinity,1,0,0,0,0]
-//i = 3 -> n 1, an 2, ban 3
-//i = 4 -> a 1, na 2, ana 3,bana 4
-//i = 5 -> n, an, nan.anan,banan
-//i = 6 -> a, na, ana.nana,anana,banana
+//i = 1 -> b 1                                  [0,Infinity,0,0,0,0,0]
+//i = 2 -> a 1, ba 2                            [0,Infinity,Infinity,0,0,0,0], [0,Infinity,1,0,0,0,0]
+//i = 3 -> n 1, an 2, ban 3                     [0,Infinity,Infinity,1,Infinity,0,0]  [0,Infinity,Infinity,1,2,0,0]
+//i = 4 -> a 1, na 2, ana 3,bana 4              [0,Infinity,Infinity,1,Infinity,Infinity,0]  [0,Infinity,Infinity,1,2,3,0]
+//i = 5 -> n 1, an 2, nan 3, anan 4,banan 5
+//i = 6 -> a 1, na 2, ana 3, nana 4,anana 5,banana 6
 
 function solution(strs, t) {
     const res = new Array(t.length + 1).fill(0);
     const wordSet = new Set(strs);
     for (let i = 1; i < t.length+1; i++) {
+        // 일단 해당 문자열의 최솟값은 무한으로 설정한다.
         res[i] = Infinity;
         for (let j = 1; j < Math.min(i + 1, 6); j++) {
             // 처음에는 해당 인덱스번째 단어와
@@ -37,13 +38,13 @@ function solution(strs, t) {
             if (wordSet.has(word)) {
                 // 단어조각안에 존재하면 이전 조합과 더해서 최솟값인지 체크 후 대입
                 //DP[i] : i번째 단계에서 사용한 단어조각의 최솟값
-                // DP[현재 문자의 위치 - 단어조각 길이] :
+                // DP[현재 문자의 위치 - 단어조각 길이] : 이전에 조합된 단어를 기억했다가 다시 꺼내온다.
                 // DP[i] = Math.min(DP[i], DP[현재 문자의 위치 - 단어조각 길이] + 1)
                 res[i] = Math.min(res[i], res[i - j] + 1);
             }
         }
     }
-
+    return res[res.length - 1] === Infinity ? -1 : res[res.length - 1];
 }
 
 

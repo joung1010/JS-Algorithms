@@ -1,56 +1,43 @@
-// 카카오 첫 공채..'블라인드' 방식 채용
-// 카카오, 합병 후 첫 공채.. 블라인드 전형으로 개발자 채용
-// 카카오, 블라인드 전형으로 신입 개발자 공채
-// 카카오 공채, 신입 개발자 코딩 능력만 본다
-// 카카오, 신입 공채.. "코딩 실력만 본다"
-// 카카오 "코딩 능력만으로 2018 신입 개발자 뽑는다"
-
-// 제목을 기준으로 "블라인드 전형"에 주목하는 기사와 "코딩 테스트"에 주목하는 기사로 나뉘는 걸 발견
-// "자카드 유사도"
-//  집합 간의 유사도를 검사하는 여러 방법 중의 하나
-
-// 두 집합 A, B 사이의 자카드 유사도 J(A, B)는 두 집합의 교집합 크기를 두 집합의 합집합 크기로 나눈 값으로 정의
-// 공집합일 경우에는 나눗셈이 정의되지 않으니 따로 J(A, B) = 1로 정의
-
-function solution(str1, str2) {
-    const BASE_NUM = 65536;
-    const regex = /[\W0-9_]/g;
-    const arr1 = [];
-    const arr2 = [];
-
-    for (let i = 1; i < str1.length; i++) {
-        const word = str1[i - 1] + str1[i];
-        if (regex.test(word)) continue;
-        arr1.push(word.toLowerCase());
+function solution(m, n, board) {
+    const gameBoard = Array.from({length: m}, (_, i) => [...board[i]]);
+    for (let i = 0; i < m; i++) {
+        findBingo(gameBoard, m, n);
     }
-
-    for (let i = 1; i < str2.length; i++) {
-        const word = str2[i - 1] + str2[i];
-        if (regex.test(word)) continue;
-        arr2.push(word.toLowerCase());
-    }
-
-
-    const cross = [];
-    const combination = [];
-
-
-    for(let i = 0 ; i < arr1.length ; i ++) {
-        if(arr2.includes(arr1[i])) {
-            const idx = arr2.indexOf(arr1[i]);
-            arr2.splice(idx,1);
-            cross.push(arr1[i]);
-        } else {
-            combination.push(arr1[i])
-        }
-    }
-
-
-    arr2.forEach((e) => combination.push(e));
-
-    return Math.floor((cross.length / (cross.length+combination.length)) * 65536)
+    return gameBoard.flatMap(v=>v).filter(v => !v).length
 }
 
+const findBingo = (board, width, height) => {
+    const binggo = Array.from({length: height}, () => Array(height).fill(false));
+    for (let i = 1; i < height - 1; i++) {
+        for (let j = 1; j < width; j++) {
+            if(!board[i][j] || !board[i][j - 1] || !board[i - 1][j - 1] || !board[i - 1][j]) continue;
+            if (board[i][j] === board[i][j - 1] && board[i][j] === board[i - 1][j - 1] && board[i][j] === board[i - 1][j]) {
+                binggo[i][j] = true;
+                binggo[i][j - 1] = true;
+                binggo[i - 1][j - 1] = true;
+                binggo[i - 1][j] = true;
+            }
+        }
+    }
+    makeBoard(board, binggo);
+};
 
 
-console.log(solution('FRANCE', 'french'));
+const makeBoard = (board, binggo) => {
+    binggo.forEach((binggo, i) => {
+        for (let j = 0; j < binggo.length; j++) {
+            if (binggo[j]) {
+                board[i][j] = null;
+            }
+        }
+    });
+    for (let i = 0; i < board.length - 1; i++) {
+        board[i].forEach((item, idx) => {
+            if (!item) return;
+            if(!board[i + 1][idx]) [board[i + 1][idx], board[i][idx]] = [item, null];
+        });
+    }
+};
+
+// console.log(solution(4, 5, ["CCBDE", "AAADE", "AAABF", "CCBBF"]));
+console.log(solution(6, 6, ["TTTANT", "RRFACC", "RRRFCC", "TRRRAA", "TTMMMF", "TMMTTJ"]));

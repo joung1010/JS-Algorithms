@@ -1,26 +1,22 @@
 function solution(files) {
-    const regx = /([a-zA-Z-]{1,})|([0-9]{1,})|([.\w\s?]{1,})/g;
-    const fileArr = files.map(file => {
-        let [head,number,tail] = file.match(regx);
-        head = head.replace("-", "").toUpperCase();
+    const regx = /([a-zA-Z\s-]+)|([0-9]{1,5})/g;
+    return  files.map(file => {
+        let [head, number] = file.replace('-',"").match(regx);
+        head = head.toUpperCase();
         number = Number(number);
-        return {head, number, tail,file};
-    }).sort((a,b) => {
+        return {head, number, file};
+    }).sort((a,b)=> {
         if (a.head !== b.head) {
             return a.head.localeCompare(b.head);
-        }else if (a.head === b.head && a.number !== b.number) {
-            return a.number - b.number;
         } else {
-            return 0;
+            return a.number - b.number;
         }
-    });
-    return fileArr.map(file => file.file);
+    }).map(file => file.file);
 }
 
-console.log(solution(["img12.png", "img10.png", "img02.png", "img1.png", "IMG01.GIF", "img2.JPG"]));
+// console.log(solution(["img12.png", "img10.png", "img02.png", "img1.png", "IMG01.GIF", "img2.JPG"]));
 
-// console.log(solution(["F-5 Freedom Fighter", "B-50 Superfortress", "A-10 Thunderbolt II", "F-14 Tomcat"]));
+console.log(solution(["F-5 Freedom Fighter", "B-50 Superfortress", "A-10 Thunderbolt II", "F-14 Tomcat"]));
 
-// 채점 결과
-// 정확성: 45.0
-// 합계: 45.0 / 100.0
+// 정확성: 85.0
+// 합계: 85.0 / 100.0

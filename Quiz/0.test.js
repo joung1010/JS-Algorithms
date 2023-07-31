@@ -1,22 +1,24 @@
-function solution(files) {
-    const regx = /([a-zA-Z\s-]+)|([0-9]{1,5})/g;
-    return  files.map(file => {
-        let [head, number] = file.replace('-',"").match(regx);
-        head = head.toUpperCase();
-        number = Number(number);
-        return {head, number, file};
-    }).sort((a,b)=> {
-        if (a.head !== b.head) {
-            return a.head.localeCompare(b.head);
-        } else {
-            return a.number - b.number;
+function solution(phone_book) {
+    const phoneSet = new Set();
+    phone_book.sort((a, b) => a - b);
+
+    for (const phoneNum of phone_book) {
+        const keys = phoneSet.values();
+        for (const prefix of keys) {
+            if (phoneNum.slice(0, prefix.length) === prefix) {
+                return false;
+            }
         }
-    }).map(file => file.file);
+        phoneSet.add(phoneNum);
+    }
+    return true;
 }
 
-// console.log(solution(["img12.png", "img10.png", "img02.png", "img1.png", "IMG01.GIF", "img2.JPG"]));
+// console.log(solution(["119", "97674223", "1195524421"]));
+// console.log(solution(["123", "456", "789"]));
+console.log(solution(["12", "123", "1235", "567", "88"]));
 
-console.log(solution(["F-5 Freedom Fighter", "B-50 Superfortress", "A-10 Thunderbolt II", "F-14 Tomcat"]));
-
-// 정확성: 85.0
-// 합계: 85.0 / 100.0
+// 채점 결과
+// 정확성: 83.3
+// 효율성: 8.3
+// 합계: 91.7 / 100.0
